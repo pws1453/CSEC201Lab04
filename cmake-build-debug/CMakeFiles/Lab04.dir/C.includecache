@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/Users/preston/CLionProjects/Lab04/main.c
+C:/Users/Preston/CLionProjects/CSEC201Lab04/main.c
 stdio.h
 -
 stdlib.h

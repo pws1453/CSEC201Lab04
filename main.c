@@ -73,10 +73,50 @@ void delete2(struct LinkList* curList, int position){
     }
 }
 
-struct LinkList* sort(struct LinkList* curList){
-    struct Node* first = curList->head;
-    struct Node* temp;
+struct Node* insertForInsort(int value, struct Node* node){
+    if (node == NULL){
+        struct Node *retNode = (struct Node*)malloc(sizeof(struct Node*));
+        retNode->data = value;
+        retNode->next=NULL;
+        return retNode;
+    } else if (node->data < value){
+        struct Node *retNode = (struct Node*)malloc(sizeof(struct Node*));
+        retNode->data = value;
+        retNode->next = node;
+        return retNode;
+    } else{
+        struct Node *retNode = (struct Node*)malloc(sizeof(struct Node*));
+        retNode->data = node->data;
+        retNode->next = insertForInsort(value,node->next);
+        return retNode;
+    }
+}
 
+
+struct Node* sort(struct Node* headNode){
+    if (headNode == NULL){
+        return NULL;
+    }
+    struct Node* sorted_node = (struct Node*)malloc(sizeof(struct Node*));
+    sorted_node->data = headNode->data;
+    sorted_node->next = NULL;
+    headNode = headNode->next;
+    while (headNode != NULL){
+        sorted_node = insertForInsort(headNode->data,sorted_node);
+        headNode = headNode->next;
+    }
+    return sorted_node;
+}
+
+void printOldestFirst(struct LinkList* curList){
+    if (curList->head == NULL){
+        return;
+    }
+    struct LinkList *retList = (struct LinkList*)malloc(sizeof(struct LinkList));
+    retList->head = curList->head->next;
+    retList->size = curList->size -1;
+    printOldestFirst(retList);
+    printf("%d ",curList->head->data);
 }
 
 int main() {
@@ -86,10 +126,15 @@ int main() {
     Add(newList,3);
     Add(newList,4);
     Add(newList,5);
+    Add(newList,6);
+    Add(newList,7);
     Delete(newList,2);
     update(newList,1,20);
     Print(newList);
     delete2(newList,2);
     Print(newList);
+    newList->head = sort(newList->head);
+    Print(newList);
+    printOldestFirst(newList);
     return 0;
 }
